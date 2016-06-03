@@ -27,7 +27,7 @@ public class CreditCardView extends FrameLayout {
     private TextView textLabelOwner;
     private FontFitTextView textOwner;
     private TextView textLabelExpDate;
-    private TextView textExpDate;
+    private FontFitTextView textExpDate;
     private TextView textNumber;
     private FontFitTextView textCVV;
 
@@ -67,7 +67,7 @@ public class CreditCardView extends FrameLayout {
         frameLayoutBackCard = (FrameLayout) findViewById(R.id.frg_input_card_back);
 
         textNumber = (TextView) findViewById(R.id.txt_number_credit_card);
-        textExpDate = (TextView) findViewById(R.id.txt_expire_credit_card);
+        textExpDate = (FontFitTextView) findViewById(R.id.txt_expire_credit_card);
         textOwner = (FontFitTextView) findViewById(R.id.txt_name_credit_card);
         cardFront = (ImageView) findViewById(R.id.view_front_card_image);
         cardBack = (ImageView) findViewById(R.id.view_back_card_image);
