@@ -19,7 +19,7 @@ public enum IssuerCode implements Serializable {
     MASTERCARD(R.string.redecardcredito, R.drawable.card_master, R.drawable.mastercard, R.drawable.mastercard_back, R.drawable.sign_master, R.color.white, R.color.gray_hard_text, "^5[1-5][0-9]{14}$"),
     NUBANK(R.string.nubank, R.drawable.card_nubank, R.drawable.nubank, R.drawable.nubank_back, R.drawable.sign_master, R.color.white, R.color.gray_hard_text),
     VISA_ELECTRON(R.string.visaelectron, R.drawable.card_visa, R.drawable.visa, R.drawable.visa_back, R.drawable.sign_visa, R.color.white, R.color.gray_hard_text, "^((4026|4508|4844|491(3|7))[0-9]{12})|((417500)[0-9]{10})$"),
-    VISA_INTERNATIONAL(R.string.visacredito, R.drawable.card_visa, R.drawable.visa, R.drawable.visa_back, R.drawable.sign_visa, R.color.white, R.color.gray_hard_text, "^(?:4[0-9]{12}(?:[0-9]{3})?"),
+    VISA_INTERNATIONAL(R.string.visacredito, R.drawable.card_visa, R.drawable.visa, R.drawable.visa_back, R.drawable.sign_visa, R.color.white, R.color.gray_hard_text, "^(?:4[0-9]{12}(?:[0-9]{3}))?"),
     OTHER(R.string.other, R.drawable.card_placeholder, R.drawable.default_card, R.drawable.default_card_back, R.drawable.sign_diners, R.color.white, R.color.gray_hard_text);
 
     private int nameId;
@@ -32,7 +32,14 @@ public enum IssuerCode implements Serializable {
     private Pattern pattern;
 
     IssuerCode(int nameId, Integer iconId, Integer imageCardFront, Integer imageCardBack, Integer imageSignCard, Integer colorText, Integer colorShadowText) {
-        this(nameId, iconId, imageCardFront, imageCardBack, imageSignCard, colorText, colorShadowText, null);
+        this.nameId = nameId;
+        this.iconId = iconId;
+        this.imageCardFront = imageCardFront;
+        this.imageCardBack = imageCardBack;
+        this.imageSignCard = imageSignCard;
+        this.colorText = colorText;
+        this.colorShadowText = colorShadowText;
+        this.pattern = null;
     }
 
     IssuerCode(int nameId, Integer iconId, Integer imageCardFront, Integer imageCardBack, Integer imageSignCard, Integer colorText, Integer colorShadowText, String pattern) {
