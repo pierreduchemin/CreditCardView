@@ -26,7 +26,7 @@ public class CrediCardViewActivity extends AppCompatActivity {
 
         final CreditCardView creditCardView = (CreditCardView) findViewById(R.id.act_creditcard_view);
 
-        creditCardView.chooseFlag(IssuerCode.VISACREDITO);
+        creditCardView.chooseFlag(IssuerCode.VISA_INTERNATIONAL);
         creditCardView.setTextExpDate("12/19");
         creditCardView.setTextNumber("5555 4444 3333 1111");
         creditCardView.setTextOwner("Felipe Silvestre");

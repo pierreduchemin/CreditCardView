@@ -52,6 +52,7 @@ public class CreditCardView extends FrameLayout {
         if (typedArray != null) {
             labelCardOwner = typedArray.getString(R.styleable.CreditCardView_labelOwner);
             labelCardDateExp = typedArray.getString(R.styleable.CreditCardView_labelDateExp);
+            typedArray.recycle();
         }
 
         init();

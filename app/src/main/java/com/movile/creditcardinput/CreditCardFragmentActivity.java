@@ -41,7 +41,7 @@ public class CreditCardFragmentActivity extends AppCompatActivity implements Act
     private List<PurchaseOption> getList() {
         List<PurchaseOption> list = new ArrayList<>();
         list.add(new PurchaseOption(PaymentMethod.Type.CREDIT_CARD, IssuerCode.MASTERCARD, 6));
-        list.add(new PurchaseOption(PaymentMethod.Type.CREDIT_CARD, IssuerCode.VISACREDITO, 6));
+        list.add(new PurchaseOption(PaymentMethod.Type.CREDIT_CARD, IssuerCode.VISA_INTERNATIONAL, 6));
         list.add(new PurchaseOption(PaymentMethod.Type.CREDIT_CARD, IssuerCode.AMEX, 6));
         list.add(new PurchaseOption(PaymentMethod.Type.CREDIT_CARD, IssuerCode.PAYPAL, 6));
         list.add(new PurchaseOption(PaymentMethod.Type.CREDIT_CARD, IssuerCode.DINERS, 6));
