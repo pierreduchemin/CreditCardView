@@ -2,6 +2,7 @@ package movile.com.creditcardguide.view;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -144,16 +145,16 @@ public class CreditCardView extends FrameLayout {
         cardBack.setImageResource(issuerCode.getImageCardBack());
         cardSign.setImageResource(issuerCode.getImageSignCard());
 
-        textLabelExpDate.setTextColor(getResources().getColor(issuerCode.getColorText()));
-        textExpDate.setTextColor(getResources().getColor(issuerCode.getColorText()));
-        textLabelOwner.setTextColor(getResources().getColor(issuerCode.getColorText()));
-        textOwner.setTextColor(getResources().getColor(issuerCode.getColorText()));
-        textNumber.setTextColor(getResources().getColor(issuerCode.getColorText()));
+        textLabelExpDate.setTextColor(ContextCompat.getColor(getContext(), issuerCode.getColorText()));
+        textExpDate.setTextColor(ContextCompat.getColor(getContext(), issuerCode.getColorText()));
+        textLabelOwner.setTextColor(ContextCompat.getColor(getContext(), issuerCode.getColorText()));
+        textOwner.setTextColor(ContextCompat.getColor(getContext(), issuerCode.getColorText()));
+        textNumber.setTextColor(ContextCompat.getColor(getContext(), issuerCode.getColorText()));
 
-        textLabelExpDate.setShadowLayer(1, 1, 1, getResources().getColor(issuerCode.getColorShadowText()));
-        textExpDate.setShadowLayer(1, 1, 1, getResources().getColor(issuerCode.getColorShadowText()));
-        textLabelOwner.setShadowLayer(1, 1, 1, getResources().getColor(issuerCode.getColorShadowText()));
-        textOwner.setShadowLayer(1, 1, 1, getResources().getColor(issuerCode.getColorShadowText()));
-        textNumber.setShadowLayer(1, 1, 1, getResources().getColor(issuerCode.getColorShadowText()));
+        textLabelExpDate.setShadowLayer(1, 1, 1, ContextCompat.getColor(getContext(), issuerCode.getColorShadowText()));
+        textExpDate.setShadowLayer(1, 1, 1, ContextCompat.getColor(getContext(), issuerCode.getColorShadowText()));
+        textLabelOwner.setShadowLayer(1, 1, 1, ContextCompat.getColor(getContext(), issuerCode.getColorShadowText()));
+        textOwner.setShadowLayer(1, 1, 1, ContextCompat.getColor(getContext(), issuerCode.getColorShadowText()));
+        textNumber.setShadowLayer(1, 1, 1, ContextCompat.getColor(getContext(), issuerCode.getColorShadowText()));
     }
 }
