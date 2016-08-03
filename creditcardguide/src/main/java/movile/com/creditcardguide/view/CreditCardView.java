@@ -2,6 +2,11 @@ package movile.com.creditcardguide.view;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Matrix;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.util.AttributeSet;
@@ -35,9 +40,12 @@ public class CreditCardView extends FrameLayout {
     private ImageView cardFront;
     private ImageView cardBack;
     private ImageView cardSign;
+    private ImageView reversedNumberBack;
 
     private String labelCardOwner;
     private String labelCardDateExp;
+
+    private IssuerCode currentIssuer;
 
 
     public CreditCardView(Context context) {
@@ -77,6 +85,7 @@ public class CreditCardView extends FrameLayout {
         textLabelExpDate = (TextView) findViewById(R.id.txt_expire_credit_card_label);
         textLabelOwner = (TextView) findViewById(R.id.txt_name_credit_card_label);
         textCVV = (FontFitTextView) findViewById(R.id.back_credit_card_txt_cvv);
+        reversedNumberBack = (ImageView) findViewById(R.id.view_reversed_number);
 
         if (!TextUtils.isEmpty(labelCardOwner)) {
             setTextLabelOwner(labelCardOwner);
@@ -112,6 +121,8 @@ public class CreditCardView extends FrameLayout {
     }
 
     public void flipToBack() {
+        reversedNumberBack.setImageBitmap(getMirrorTransparentBitmap(getContext(), textNumber, currentIssuer));
+
         FlipAnimation flipAnimation = new FlipAnimation(frameLayoutFrontCard, frameLayoutBackCard);
         rootCreditCard.startAnimation(flipAnimation);
     }
@@ -133,17 +144,20 @@ public class CreditCardView extends FrameLayout {
     }
 
     public void chooseFlag(IssuerCode issuerCode) {
+        this.currentIssuer = issuerCode;
+
         if (issuerCode == IssuerCode.AMEX) {
             textCVV.setText("0000", TextView.BufferType.NORMAL);
         } else {
             textCVV.setText("000", TextView.BufferType.NORMAL);
         }
 
-        AnimateImageTransitionFade.imageViewAnimatedChange(getContext(), cardFront,
-                issuerCode.getImageCardFront());
+        AnimateImageTransitionFade.imageViewAnimatedChange(getContext(), cardFront, issuerCode.getImageCardFront());
 
         cardBack.setImageResource(issuerCode.getImageCardBack());
         cardSign.setImageResource(issuerCode.getImageSignCard());
+
+        getImageColor(getContext(), issuerCode.getImageCardBack());
 
         textLabelExpDate.setTextColor(ContextCompat.getColor(getContext(), issuerCode.getColorText()));
         textExpDate.setTextColor(ContextCompat.getColor(getContext(), issuerCode.getColorText()));
@@ -156,5 +170,42 @@ public class CreditCardView extends FrameLayout {
         textLabelOwner.setShadowLayer(1, 1, 1, ContextCompat.getColor(getContext(), issuerCode.getColorShadowText()));
         textOwner.setShadowLayer(1, 1, 1, ContextCompat.getColor(getContext(), issuerCode.getColorShadowText()));
         textNumber.setShadowLayer(1, 1, 1, ContextCompat.getColor(getContext(), issuerCode.getColorShadowText()));
+    }
+
+    private Bitmap getMirrorTransparentBitmap(Context context, TextView textView, IssuerCode issuerCode) {
+        // Invert colors
+        textView.setTextColor(getDarkerColor(getImageColor(context, issuerCode.getImageCardBack()), 0.7f));
+        textView.setShadowLayer(1, 0, 1, ContextCompat.getColor(context, R.color.white));
+
+        // Draw current TextView on a canvas
+        Bitmap source = Bitmap.createBitmap(textView.getWidth(), textView.getHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(source);
+        textView.draw(canvas);
+
+        // Invert colors
+        textView.setTextColor(ContextCompat.getColor(context, issuerCode.getColorText()));
+        textView.setShadowLayer(1, 1, 1, ContextCompat.getColor(context, issuerCode.getColorShadowText()));
+
+        // Reverse source
+        int width = source.getWidth();
+        int height = source.getHeight();
+        Matrix matrix = new Matrix();
+        matrix.preScale(-1.0f, 1.0f);
+        return Bitmap.createBitmap(source, 0, 0, width, height, matrix, false);
+    }
+
+    public static int getDarkerColor(int color, float factor) {
+        float[] hsv = new float[3];
+        Color.colorToHSV(color, hsv);
+        hsv[2] *= factor;
+        return Color.HSVToColor(hsv);
+    }
+
+    public static int getImageColor(Context context, int drawable) {
+        Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), drawable);
+        Bitmap newBitmap = Bitmap.createScaledBitmap(bitmap, 11, 11, true);
+        final int color = newBitmap.getPixel(10, 10);
+        newBitmap.recycle();
+        return color;
     }
 }
