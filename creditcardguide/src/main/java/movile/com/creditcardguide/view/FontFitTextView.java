@@ -11,41 +11,33 @@ import android.widget.TextView;
 import movile.com.creditcardguide.R;
 
 
-public class FontFitTextView extends TextView
-{
+public class FontFitTextView extends TextView {
 
     private Paint mTestPaint;
     private float maxFontSize;
     private static final float MAX_FONT_SIZE_DEFAULT_VALUE = 20f;
 
-    public FontFitTextView(Context context)
-    {
+    public FontFitTextView(Context context) {
         super(context);
         initialise(context, null);
     }
 
-    public FontFitTextView(Context context, AttributeSet attributeSet)
-    {
+    public FontFitTextView(Context context, AttributeSet attributeSet) {
         super(context, attributeSet);
         initialise(context, attributeSet);
     }
 
-    public FontFitTextView(Context context, AttributeSet attributeSet, int defStyle)
-    {
+    public FontFitTextView(Context context, AttributeSet attributeSet, int defStyle) {
         super(context, attributeSet, defStyle);
         initialise(context, attributeSet);
     }
 
-    private void initialise(Context context, AttributeSet attributeSet)
-    {
-        if(attributeSet!=null)
-        {
+    private void initialise(Context context, AttributeSet attributeSet) {
+        if (attributeSet != null) {
             TypedArray styledAttributes = context.obtainStyledAttributes(attributeSet, R.styleable.FontFitTextView);
             maxFontSize = styledAttributes.getDimension(R.styleable.FontFitTextView_maxFontSize, MAX_FONT_SIZE_DEFAULT_VALUE);
             styledAttributes.recycle();
-        }
-        else
-        {
+        } else {
             maxFontSize = MAX_FONT_SIZE_DEFAULT_VALUE;
         }
 
@@ -57,8 +49,7 @@ public class FontFitTextView extends TextView
     /* Re size the font so the specified text fits in the text box
      * assuming the text box is the specified width.
      */
-    private void refitText(String text, int textWidth, int textHeight)
-    {
+    private void refitText(String text, int textWidth, int textHeight) {
         if (textWidth <= 0)
             return;
         int targetWidth = textWidth - this.getPaddingLeft() - this.getPaddingRight();
@@ -72,8 +63,7 @@ public class FontFitTextView extends TextView
 
         Rect bounds = new Rect();
 
-        while ((hi - lo) > threshold)
-        {
+        while ((hi - lo) > threshold) {
             float size = (hi + lo) / 2;
             mTestPaint.setTextSize(size);
 
@@ -94,8 +84,7 @@ public class FontFitTextView extends TextView
     }
 
     @Override
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec)
-    {
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
         int parentWidth = MeasureSpec.getSize(widthMeasureSpec);
         int height = getMeasuredHeight();
@@ -104,16 +93,13 @@ public class FontFitTextView extends TextView
     }
 
     @Override
-    protected void onTextChanged(final CharSequence text, final int start, final int before, final int after)
-    {
+    protected void onTextChanged(final CharSequence text, final int start, final int before, final int after) {
         refitText(text.toString(), this.getWidth(), this.getHeight());
     }
 
     @Override
-    protected void onSizeChanged(int w, int h, int oldw, int oldh)
-    {
-        if (w != oldw)
-        {
+    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+        if (w != oldw) {
             refitText(this.getText().toString(), w, h);
         }
     }

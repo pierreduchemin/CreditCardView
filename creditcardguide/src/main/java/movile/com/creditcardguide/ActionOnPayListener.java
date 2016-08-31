@@ -7,5 +7,6 @@ import movile.com.creditcardguide.model.CreditCardPaymentMethod;
  */
 public interface ActionOnPayListener {
     void onChangedPage(CreditCardFragment.Step page);
+
     void onComplete(CreditCardPaymentMethod purchaseOption, boolean saveCard);
 }

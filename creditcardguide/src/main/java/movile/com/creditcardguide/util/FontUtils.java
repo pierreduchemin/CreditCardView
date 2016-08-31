@@ -21,7 +21,8 @@ public class FontUtils {
     private static Typeface tfDefaultItalic;
     private static Typeface tfDefaultOCR;
 
-    private FontUtils(){}
+    private FontUtils() {
+    }
 
     // Returns/Load the app's default font
     private static Typeface getDefaultFont(Context context, FontType type) {

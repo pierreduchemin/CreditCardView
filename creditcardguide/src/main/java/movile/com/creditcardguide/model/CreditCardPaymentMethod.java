@@ -100,7 +100,7 @@ public class CreditCardPaymentMethod extends PaymentMethod {
 
     @Override
     public String toString() {
-                return "creditCardName='" + creditCardName + '\'' +
+        return "creditCardName='" + creditCardName + '\'' +
                 ", creditCardNumber='" + creditCardNumber + '\'' +
                 ", expireMonth=" + expireMonth +
                 ", expireYear=" + expireYear +

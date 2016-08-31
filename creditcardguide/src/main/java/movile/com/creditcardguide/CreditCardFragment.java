@@ -1,6 +1,5 @@
 package movile.com.creditcardguide;
 
-import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.res.ColorStateList;
@@ -11,12 +10,14 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -36,9 +37,12 @@ import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
+
 import movile.com.creditcardguide.model.CreditCardPaymentMethod;
 import movile.com.creditcardguide.model.IssuerCode;
 import movile.com.creditcardguide.model.PurchaseOption;
@@ -49,6 +53,7 @@ import movile.com.creditcardguide.view.LockableViewPager;
 
 public class CreditCardFragment extends Fragment implements TextWatcher, TextView.OnEditorActionListener, View.OnFocusChangeListener {
 
+    private static final String TAG = CreditCardFragment.class.getSimpleName();
     private static final int AMEX_MAX_CVV = 4;
     private static final int COMMON_MAX_CVV = 3;
 
@@ -85,7 +90,7 @@ public class CreditCardFragment extends Fragment implements TextWatcher, TextVie
     private InstallmentsCardAdapter installmentsCardAdapter;
     private CreditCardValidator validator;
     private List<PurchaseOption> purchaseOptions;
-    private Double valueTotal = new Double(0);
+    private Double valueTotal = .0;
     private ActionOnPayListener actionOnPayListener;
     private AtomicBoolean backFinish = new AtomicBoolean(false);
     private int colorFieldWrong;
@@ -113,29 +118,12 @@ public class CreditCardFragment extends Fragment implements TextWatcher, TextVie
     private boolean cardRestored;
 
     @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-
-        if (activity instanceof ActionOnPayListener) {
-            actionOnPayListener = (ActionOnPayListener) activity;
-        }
-
-    }
-
-    @Override
     public void onAttach(Context context) {
         super.onAttach(context);
 
         if (context instanceof ActionOnPayListener) {
             actionOnPayListener = (ActionOnPayListener) context;
         }
-    }
-
-    @Override
-    public void onInflate(Activity activity, AttributeSet attrs, Bundle savedInstanceState) {
-        super.onInflate(activity, attrs, savedInstanceState);
-
-        parseAttrs(activity, attrs);
     }
 
     @Override
@@ -163,6 +151,7 @@ public class CreditCardFragment extends Fragment implements TextWatcher, TextVie
 
             this.attrInstallments = typedArray.getBoolean(R.styleable.CreditCardFragment_installments, true);
             this.attrSaveCard = typedArray.getBoolean(R.styleable.CreditCardFragment_saveCard, true);
+            typedArray.recycle();
         }
     }
 
@@ -174,15 +163,15 @@ public class CreditCardFragment extends Fragment implements TextWatcher, TextVie
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_input_credit_card2, null);
+        View view = inflater.inflate(R.layout.fragment_input_credit_card2, container);
         FontUtils.loadFonts(view);
 
         if (savedInstanceState != null && savedInstanceState.containsKey(PURCHASE_OPTION_SELECTED)) {
             selectedPurchaseOption = (PurchaseOption) savedInstanceState.getSerializable(PURCHASE_OPTION_SELECTED);
         }
 
-        colorFieldWrong = getActivity().getResources().getColor(R.color.red_wrong);
-        colorField = getActivity().getResources().getColor(R.color.edittext_color);
+        colorFieldWrong = ContextCompat.getColor(getActivity(), R.color.red_wrong);
+        colorField = ContextCompat.getColor(getActivity(), R.color.edittext_color);
 
         validator = new CreditCardValidatorProd();
 
@@ -220,7 +209,7 @@ public class CreditCardFragment extends Fragment implements TextWatcher, TextVie
         viewHolder = view;
         bindAttr();
 
-        pager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+        pager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
             }
@@ -407,7 +396,7 @@ public class CreditCardFragment extends Fragment implements TextWatcher, TextVie
     }
 
     private void nextPage() {
-        if (pages.indexOf(lastStep) == pages.size() - 1|| cardRestored) {
+        if (pages.indexOf(lastStep) == pages.size() - 1 || cardRestored) {
             showPaymentLayout();
         } else {
             pager.setCurrentItem(pages.indexOf(lastStep) + 1);
@@ -531,25 +520,29 @@ public class CreditCardFragment extends Fragment implements TextWatcher, TextVie
         Animation anim = AnimationUtils.loadAnimation(getActivity(), R.anim.shake);
 
         switch (lastStep) {
-            case NUMBER : {
+            case NUMBER: {
                 viewHolder.findViewById(R.id.page_one).startAnimation(anim);
                 editNumberCard.setTextColor(colorFieldWrong);
-            } break;
+            }
+            break;
 
-            case EXPIRE_DATE : {
+            case EXPIRE_DATE: {
                 viewHolder.findViewById(R.id.page_two).startAnimation(anim);
                 editExpireCard.setTextColor(colorFieldWrong);
-            } break;
+            }
+            break;
 
-            case CVV : {
+            case CVV: {
                 viewHolder.findViewById(R.id.page_three).startAnimation(anim);
                 editCVVCard.setTextColor(colorFieldWrong);
-            } break;
+            }
+            break;
 
-            case NAME : {
+            case NAME: {
                 viewHolder.findViewById(R.id.page_four).startAnimation(anim);
                 editNameCard.setTextColor(colorFieldWrong);
-            } break;
+            }
+            break;
         }
     }
 
@@ -558,7 +551,8 @@ public class CreditCardFragment extends Fragment implements TextWatcher, TextVie
         switch (page) {
             case FLAG: {
                 btNext.setVisibility(View.INVISIBLE);
-            } break;
+            }
+            break;
             case NUMBER: {
                 btNext.setVisibility(View.VISIBLE);
 
@@ -571,7 +565,8 @@ public class CreditCardFragment extends Fragment implements TextWatcher, TextVie
                 } else {
                     btNext.setActivated(false);
                 }
-            } break;
+            }
+            break;
 
             case EXPIRE_DATE: {
                 btNext.setVisibility(View.VISIBLE);
@@ -586,19 +581,20 @@ public class CreditCardFragment extends Fragment implements TextWatcher, TextVie
                 } else {
                     btNext.setActivated(false);
                 }
-            } break;
+            }
+            break;
 
             case CVV: {
                 btNext.setVisibility(View.VISIBLE);
 
                 if (selectedPurchaseOption == null) {
                     // TODO: soft bug
-//                    Crashlytics.log("Selected purchase Option is null");
+                    Log.i(TAG, "Selected purchase Option is null");
                 }
 
                 if (validator == null) {
                     // TODO: soft bug
-//                    Crashlytics.log("validator credit card is null");
+                    Log.i(TAG, "validator credit card is null");
                 }
 
                 if (validator.validateSecurityCode(selectedPurchaseOption.getIssuerCode(), editCVVCard, false)) {
@@ -610,7 +606,8 @@ public class CreditCardFragment extends Fragment implements TextWatcher, TextVie
                 } else {
                     btNext.setActivated(false);
                 }
-            } break;
+            }
+            break;
 
             case NAME: {
                 btNext.setVisibility(View.VISIBLE);
@@ -624,7 +621,8 @@ public class CreditCardFragment extends Fragment implements TextWatcher, TextVie
                 } else {
                     btNext.setActivated(false);
                 }
-            } break;
+            }
+            break;
         }
 
     }
@@ -635,7 +633,8 @@ public class CreditCardFragment extends Fragment implements TextWatcher, TextVie
         Animation anim = AnimationUtils.loadAnimation(getActivity(), R.anim.trans_rigth_out);
         anim.setAnimationListener(new Animation.AnimationListener() {
             @Override
-            public void onAnimationStart(Animation animation) {}
+            public void onAnimationStart(Animation animation) {
+            }
 
             @Override
             public void onAnimationEnd(Animation animation) {
@@ -650,7 +649,8 @@ public class CreditCardFragment extends Fragment implements TextWatcher, TextVie
             }
 
             @Override
-            public void onAnimationRepeat(Animation animation) {}
+            public void onAnimationRepeat(Animation animation) {
+            }
         });
 
         if (editFlagCard) {
@@ -658,7 +658,7 @@ public class CreditCardFragment extends Fragment implements TextWatcher, TextVie
             clearFields();
 
             Snackbar snackbar = Snackbar.make(viewHolder, R.string.option_pay_using_other_card_chosen, Snackbar.LENGTH_LONG)
-                    .setActionTextColor(getActivity().getResources().getColor(R.color.white))
+                    .setActionTextColor(ContextCompat.getColor(getActivity(), R.color.white))
                     .setAction(R.string.undo, new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
@@ -735,16 +735,13 @@ public class CreditCardFragment extends Fragment implements TextWatcher, TextVie
     }
 
 
-
     public void setPagesOrder(Step... pages) throws IllegalArgumentException {
         if (pages.length < Step.values().length) {
             throw new IllegalArgumentException("You need provide at least " + Step.values().length + " pages");
         } else {
             this.pages = new ArrayList<>();
 
-            for (int i = 0; i < Step.values().length; i++) {
-                this.pages.add(pages[i]);
-            }
+            this.pages.addAll(Arrays.asList(pages).subList(0, Step.values().length));
 
             pager.setOffscreenPageLimit(5);
             FieldsPageAdapter adapter = new FieldsPageAdapter(viewHolder, this.pages);

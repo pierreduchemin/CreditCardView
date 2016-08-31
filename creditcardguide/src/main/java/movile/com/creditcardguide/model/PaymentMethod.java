@@ -13,7 +13,7 @@ public class PaymentMethod implements Serializable {
 
     private Type type;
 
-    public PaymentMethod(){
+    public PaymentMethod() {
         this.type = Type.CREDIT_CARD;
     }
 

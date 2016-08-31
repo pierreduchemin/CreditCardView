@@ -3,7 +3,6 @@ package movile.com.creditcardguide;
 import android.text.TextUtils;
 import android.widget.EditText;
 
-
 import java.util.Calendar;
 
 import movile.com.creditcardguide.model.IssuerCode;

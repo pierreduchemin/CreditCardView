@@ -1,6 +1,7 @@
 package movile.com.creditcardguide;
 
 import android.content.Context;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -63,7 +64,7 @@ public class InstallmentsCardAdapter extends BaseAdapter {
             ((TextView) convertView.findViewById(R.id.adapter_portion_card_txt_name)).setText("-");
             FontUtils.apply(convertView.findViewById(R.id.adapter_portion_card_txt_name), FontUtils.FontType.LIGHT);
             ((TextView) convertView.findViewById(R.id.adapter_portion_card_txt_name))
-                    .setHintTextColor(context.getResources().getColor(R.color.gray_hint));
+                    .setHintTextColor(ContextCompat.getColor(context, R.color.gray_hint));
 
         }
 

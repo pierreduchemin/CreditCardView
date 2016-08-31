@@ -9,7 +9,7 @@ public class AnimateImageTransitionFade {
 
     public static void imageViewAnimatedChange(Context c, final ImageView v, final int resourceImage) {
         final Animation anim_out = AnimationUtils.loadAnimation(c, android.R.anim.fade_out);
-        final Animation anim_in  = AnimationUtils.loadAnimation(c, android.R.anim.fade_in);
+        final Animation anim_in = AnimationUtils.loadAnimation(c, android.R.anim.fade_in);
         anim_out.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
