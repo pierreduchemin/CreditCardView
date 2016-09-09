@@ -23,10 +23,8 @@
         android:layout_gravity="bottom"
         android:clickable="false"
         android:orientation="vertical"
-        android:paddingEnd="19dp"
-        android:paddingLeft="24dp"
-        android:paddingRight="19dp"
-        android:paddingStart="24dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
         >
 
         <movile.com.creditcardguide.view.FontFitTextView
