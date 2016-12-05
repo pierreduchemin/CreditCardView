@@ -7,6 +7,8 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
+import android.support.annotation.IntRange;
+import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.util.AttributeSet;
@@ -101,7 +103,31 @@ public class CreditCardView extends FrameLayout {
     }
 
     public void setTextNumber(CharSequence textNumber) {
-        this.textNumber.setText(textNumber);
+        setTextNumber(textNumber, false);
+    }
+
+    public void setTextNumber(CharSequence textNumber, boolean hideNumbers) {
+        if (hideNumbers) {
+            this.textNumber.setText(replaceCharacters(textNumber.toString(), 7, '#', ' '));
+        } else {
+            this.textNumber.setText(textNumber);
+        }
+    }
+
+    private String replaceCharacters(@NonNull String s, @IntRange(from = 1) int length, char replacement, char ignoreChar) {
+        s = s.trim();
+        if (s.length() < length) {
+            length = s.length();
+        }
+        char[] data = new char[length];
+        for (int i = 0; i < length; i++) {
+            if (s.charAt(i) == ignoreChar) {
+                data[i] = ignoreChar;
+            } else {
+                data[i] = replacement;
+            }
+        }
+        return new String(data) + s.substring(length);
     }
 
     public void setTextExpDate(CharSequence textExpDate) {
